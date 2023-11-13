@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<ShopBanHoa.Areas.Admin.Models.Account>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/Assets/admin/css/custom-pagination.css" rel="stylesheet" />
+    <title>Index</title>
+    <style>
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 0.25rem;
+        }
+
+            .pagination a {
+                color: black;
+                border: 1px solid transparent;
+                border-radius: 50%;
+                padding: 0;
+                min-width: 2rem;
+                line-height: 2rem;
+                height: 2rem;
+                text-align: center;
+                margin: 0px 5px;
+                display: block;
+                position: relative;
+            }
+
+            .pagination .page-item.active a {
+                background: #3f87f5;
+                border-color: transparent;
+            }
+
+        .page-item.active a {
+            z-index: 1;
+            color: #fff;
+        }
+
+        .pagination .page-item.active {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quản lý khách hàng</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="btn btn-default">
+                @Html.ActionLink("Thêm khách hàng", "Create")
+
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            @using (Html.BeginForm("Index", "User", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-md-8 p-0 text-right">
+                        <input type="text" name="searchstring" value="@ViewBag.Search" class="p-2" />
+                    </div>
+
+                    <div class="col-md-4 pxy-2">
+                        <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+
+
+    </div>
+
+    <div>
+        <div class="m-t-25">
+            <table id="data-table" class="table">
+                <thead>
+                    <tr>
+                        <th>#ID</th>
+
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Họ và tên</th>
+                        <th>Ngày tạo</th>
+                        <th>Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.AccountID</td>
+
+                            <td>@item.Email</td>
+                            <td>@item.Phone</td>
+                            <td>@item.FullName</td>
+                            <td>@item.CreateDate</td>
+
+                            <td>
+                                @Html.ActionLink("Sửa", "Edit", new { id = item.AccountID }) |
+                                <p style="cursor:pointer;display:inline" onclick="ConfirmDelete(@item.AccountID)">
+                                    Xóa
+                                </p>
+                             
+
+
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#ID</th>
+
+                        <th>Tên đăng nhập</th>
+                        <th>Mật khẩu</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th>Họ và tên</th>
+                        <th>Ngày tạo</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div>
+                <div class="modal fade" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+
+                            <div class="modal-header" style="display:block">
+                                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                <h3 class="modal-title">Xóa tài khoản</h3>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Bạn chắc chắn xóa tài khoản này chứ ?</h4>
+
+                                <div style="text-align:center;display:none" id="loaderDiv">
+
+                                    <img src="~/Assets/admin/images/others/Loading_2.gif" style="height:200px;width:200px" />
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-default" data-dismiss="modal">Hủy</a>
+                                <a href="#" class="btn btn-success" onclick="DeleteEmployee()">Xác nhận</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <input type="hidden" id="hiddenEmployeeId" />
+
+            </div>
+
+
+            @Html.PagedListPager(Model,
+                page => Url.Action("Index", new { page , @searchstring = @ViewBag.Search }),
+                new PagedListRenderOptions {
+
+                    UlElementClasses = new[] { "pagination",},
+
+                    LiElementClasses = new string[] { "page-item" }
+
+                })
+
+
+
+
+        </div>
+    </div>
+    <script>
+
+        var ConfirmDelete = function (EmployeeId) {
+
+            $("#hiddenEmployeeId").val(EmployeeId);
+            $("#myModal").modal('show');
+        }
+
+        var DeleteEmployee = function () {
+
+            $("#loaderDiv").show();
+
+            var empId = $("#hiddenEmployeeId").val();
+
+            $.ajax({
+
+                type: "POST",
+                url: "/Admin/User/DeleteUser",
+                data: { EmployeeId: empId },
+                success: function (result) {
+                    $("#loaderDiv").hide();
+                    $("#myModal").modal("hide");
+                    $("#row_" + empId).remove();
+                    location.reload();
+
+                }
+
+            })
+
+        }
+    </script>
+</body>
+</html>

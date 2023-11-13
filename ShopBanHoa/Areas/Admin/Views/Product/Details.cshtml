@@ -1,0 +1,161 @@
+﻿@model ShopBanHoa.Areas.Admin.Models.SanPham
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-header no-gutters has-tab">
+        <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+            <div class="media align-items-center m-b-15">
+                <div class="avatar avatar-image rounded" style="height: 70px; width: 70px">
+
+                    @*<img src="~/Assets/admin/images/product/@Model.AnhSP" />*@
+                    <img src="~/Assets/admin/images/product/@Html.DisplayFor(model => model.AnhSP)" />
+                </div>
+                <div class="m-l-15">
+                    <h4 class="m-b-0">@Html.DisplayFor(model => model.TenSP)</h4>
+                    <p class="text-muted m-b-0">Mã sản phẩm:  @Html.DisplayFor(model => model.MaSP)</p>
+                </div>
+            </div>
+            <div class="m-b-15">
+                <button class="btn btn-primary">
+                    <a href="~/Admin/Product/Edit?id=@Model.MaSP" style="color:white">
+                    <i class="anticon anticon-edit"></i>
+                    <span>Edit</span>
+                    </a>
+                </button>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#product-overview">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product-images">Product Images</a>
+            </li>
+        </ul>
+    </div>
+    <div class="container-fluid">
+        <div class="tab-content m-t-15">
+            <div class="tab-pane fade show active" id="product-overview">
+               
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Basic Info</h4>
+                        <div class="table-responsive">
+                            <table class="product-info-table m-t-20">
+                                <tbody>
+                                    <tr>
+                                        <td>Price:</td>
+                                        <td class="text-dark font-weight-semibold">@Html.DisplayFor(model => model.GiaSP)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Category:</td>
+                                        <td>@Html.DisplayFor(model => model.DanhMuc.TenDM)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày tạo:</td>                                   
+                                        <td> @string.Format("{0:dd/MM/yyyy}", Model.CreateDate)</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Stock</td>
+                                        <td>@Html.DisplayFor(model => model.SoLuong)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status:</td>
+                                        <td>
+                                            @if (Model.SoLuong > 0)
+                                            {
+                                                <span class="badge badge-pill badge-cyan">In Stock</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger">Out Stock</span>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Option Info</h4>
+                        <div class="table-responsive">
+                            <table class="product-info-table m-t-20">
+                                <tbody>
+                                    <tr>
+                                        <td>Trọng lượng:</td>
+                                        <td>@Model.Trongluong</td>
+                                    </tr>
+                                    @*<tr>
+                                        <td>Colors:</td>
+                                        <td class="d-flex">
+                                            <span class="d-flex align-items-center m-r-20">
+                                                <span class="badge badge-dot product-color m-r-5" style="background-color: #4c4e69"></span>
+                                                <span>Dark Blue</span>
+                                            </span>
+                                            <span class="d-flex align-items-center m-r-20">
+                                                <span class="badge badge-dot product-color m-r-5" style="background-color: #868686"></span>
+                                                <span>Gray</span>
+                                            </span>
+                                            <span class="d-flex align-items-center m-r-20">
+                                                <span class="badge badge-dot product-color m-r-5" style="background-color: #8498c7"></span>
+                                                <span>Gray Blue</span>
+                                            </span>
+                                        </td>
+                                    </tr>*@
+                                    <tr>
+                                        <td>Nguyên liệu:</td>
+                                        <td>@Model.nguyenlieu</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mô tả ngắn:</td>
+                                        <td>@Model.MotaShort</td>
+                                    </tr>
+                                 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Mô tả sản phẩm</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            @Model.MotaDai
+                        </p>
+
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="product-images">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img class="img-fluid" src="~/Assets/admin/images/product/@Html.DisplayFor(model => model.AnhSP)" alt="">
+                                
+                            </div>
+                            <div class="col-md-3">
+                                <img class="img-fluid" src="~/Assets/admin/images/product/@Html.DisplayFor(model => model.AnhSP)" alt="">
+                            </div>
+                            <div class="col-md-3">
+                                <img class="img-fluid" src="~/Assets/admin/images/product/@Html.DisplayFor(model => model.AnhSP)" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

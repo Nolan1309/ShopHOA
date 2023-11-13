@@ -1,0 +1,138 @@
+﻿@model ShopBanHoa.Areas.Admin.Models.SanPham
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="page-header no-gutters has-tab">
+        <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+            <div class="media align-items-center m-b-15">
+                <div class="avatar avatar-image rounded" style="height: 70px; width: 70px">
+                    <img src="~/Assets/admin/images/product/@Model.AnhSP" />
+
+                </div>
+                <div class="m-l-15">
+                    <h4 class="m-b-0">@Model.TenSP</h4>
+                    <p class="text-muted m-b-0">Mã sản phẩm :  @Html.EditorFor(model => model.MaSP, new { htmlAttributes = new { @class = "form-control" ,@readonly = "readonly" } })</p>
+                </div>
+            </div>
+            <div class="m-b-15">
+                <button type="submit" class="btn btn-primary">
+                    <i class="anticon anticon-save"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#product-edit-basic">Basic Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product-edit-option">Option Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product-edit-description">Description</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content m-t-15">
+        <div class="tab-pane fade show active" id="product-edit-basic">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productName">Tên sản phẩm</label>
+                        @*<input type="text" class="form-control" id="productName" placeholder="Product Name" value="Skinny Men Blazer">*@
+                        @Html.EditorFor(model => model.TenSP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenSP, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productPrice">Giá gốc</label>
+                        @*<input type="text" class="form-control" id="productPrice" placeholder="Price" value="$ 199">*@
+                        @Html.EditorFor(model => model.GiaSP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.GiaSP, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productPrice">Giá Sale</label>
+                        @*<input type="text" class="form-control" id="productPrice" placeholder="Price" value="$ 199">*@
+                        @Html.EditorFor(model => model.GiaSale, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.GiaSale, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productPrice">Phần trăm giảm</label>
+                        @*<input type="text" class="form-control" id="productPrice" placeholder="Price" value="$ 199">*@
+                        @Html.EditorFor(model => model.SalePercent, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SalePercent, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productCategory">Danh mục</label>
+                        @Html.DropDownListFor(model => model.MaDM, (SelectList)ViewBag.DanhMucList, "Chọn danh mục", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MaDM, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productBrand">Số lượng</label>
+                        @Html.EditorFor(model => model.SoLuong, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SoLuong, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productBrand">Mô tả ngắn</label>
+                        @Html.EditorFor(model => model.MotaShort, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MotaShort, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="product-edit-option">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productSize">Trọng lượng</label>
+                        @Html.EditorFor(model => model.Trongluong, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Trongluong, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productSize">Nguyên liệu</label>
+                        @Html.EditorFor(model => model.nguyenlieu, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.nguyenlieu, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-semibold" for="productSize">Ảnh sản phẩm</label>
+                        <input type="file" id="uploadhinh" name="uploadhinh" accept="image/*" />
+                        @Html.ValidationMessageFor(model => model.AnhSP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="product-edit-description">
+            <div class="card">
+                <div class="card-body">
+                    
+                    <div id="productDescription">
+                        @*<textarea class="form-control" name="detail" id="input_detail"></textarea>*@
+                        @Html.EditorFor(model => model.MotaDai, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MotaDai, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#input_detail'), {
+            // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+        })
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
+</script>

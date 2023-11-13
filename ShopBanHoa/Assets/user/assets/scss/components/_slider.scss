@@ -1,0 +1,159 @@
+/*--------- hero slider start ---------*/
+.hero-slider {
+    &-item {
+        height: 510px;
+        display: flex;
+        align-items: center;
+        // responsive
+        @media #{$md-device} {
+            height: 400px;
+        }
+        @media #{$sm-device} {
+            height: 370px;
+        }
+    }
+    &-item_2 {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        // responsive
+        @media #{$md-device} {
+            height: 400px;
+        }
+        @media #{$sm-device} {
+            height: 370px;
+        }
+        .hero-slider-content {
+            margin-top: 100px;
+            // responsive
+            @media #{$md-device, $sm-device} {
+                margin-top: 0;
+            }
+        }
+    }
+    &-item_3 {
+        height: 800px;
+        display: flex;
+        align-items: center;
+        // responsive
+        @media #{$xlmax-device, $lg-device} {
+            height: 590px;
+        }
+        @media #{$md-device} {
+            height: 400px;
+        }
+        @media #{$sm-device} {
+            height: 300px;
+        }
+    }
+    &-content {
+        span {
+            display: block;
+            color: $theme-color;
+            font-size: 30px;
+            line-height: 1.2;
+            padding-bottom: 15px;
+            text-transform: capitalize;
+            font-family: $font-family-special;
+            // responsive
+            @media #{$md-device, $sm-device} {
+                padding-bottom: 10px;
+            }
+        }
+        h1,
+        h2 {
+            color: $black-soft;
+            font-size: 48px;
+            font-weight: 500;
+            line-height: 1.1;
+            text-transform: capitalize;
+            // responsive
+            @media #{$md-device} {
+                font-size: 45px;
+                line-height: 1.1;
+            }
+            @media #{$sm-device} {
+                font-size: 30px;
+                line-height: 1.1;
+            }
+        }
+        .btn-hero,
+        .btn-outline {
+            margin-top: 32px;
+        }
+    }
+}
+/*------ hero slider for home 3 end ------*/
+
+.hero-bg {
+    height: 650px;
+    display: flex;
+	align-items: center;
+	background-position: center;
+	background-repeat: no-repeat;
+	// responsive
+	@media #{$md-device} {
+		height: 550px;
+	  }
+    @media #{$sm-device} {
+      height: 350px;
+	}
+	.content-inner {
+		padding: 0 80px;
+		// responsive
+		@media #{$md-device, $sm-device} {
+			padding: 0 15px;
+		}
+	}
+	.hero-slider-content {
+		span {
+			font-weight: 400;
+			font-family: $font-family-heading;
+			// responsive
+			@media #{$sm-device} {
+				font-size: 24px;
+			}
+		}
+		h5 {
+			padding-top: 20px;
+		}
+	}
+}
+.hero-slider-active-2 {
+	.slick-slide {
+		opacity: 0.5;
+		.content-inner {
+			opacity: 0;
+		}
+		&.slick-current {
+			&.slick-active {
+				opacity: 1;
+				.content-inner {
+					opacity: 1;
+				}
+			}
+		}
+	}
+}
+
+// slider text animation
+.slick-active {
+    .hero-slider-content {
+        &.slide-1,
+        &.slide-2 {
+            h1 {
+                animation: slideInUp 0.8s linear alternate; 
+            }
+            h2 {
+                animation: slideInUp 0.8s linear alternate;
+            }
+            span {
+                animation: slideInUp 0.5s linear alternate;
+            }
+            a {
+                animation: slideInUp 1s linear alternate; 
+            }
+        } 
+    }
+}
+
