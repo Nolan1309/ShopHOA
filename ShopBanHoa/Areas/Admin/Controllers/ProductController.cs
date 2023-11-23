@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 namespace ShopBanHoa.Areas.Admin.Controllers
@@ -50,53 +51,30 @@ namespace ShopBanHoa.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(SanPham sp, HttpPostedFileBase uploadhinh)
+        public ActionResult Create(SanPham sp)
         {
             SetSelect();
             if (ModelState.IsValid)
             {
-               
-                ProductModel spmodel = new ProductModel();
-                spmodel.insert(sp);
-                if (uploadhinh != null && uploadhinh.ContentLength > 0)
+                var sqlParameter = new SqlParameter
                 {
-                    int id;
-                    //Lấy ra id của dữ liệu vừa thêm ( lấy hàng cuối cùng ) 
-                    using (SqlConnection connection = db.sqlstring())
-                    {
-                        connection.Open();                     
-                        string sql = "SELECT TOP 1 MASP FROM SanPham ORDER BY MASP DESC";
-                        using (SqlCommand cmd = new SqlCommand(sql, connection))
-                        {                           
-                             id = (int)cmd.ExecuteScalar();                           
-                        }
-                    }
-                    //Đổi tên theo từng sản phẩm
-                    string _FileName = "";
-                    int index = uploadhinh.FileName.IndexOf('.');
-                    _FileName = "product" + id.ToString() + "." + uploadhinh.FileName.Substring(index + 1);
-                    string _path = Path.Combine(Server.MapPath("~/Assets/admin/images/product"), _FileName);
-
-                    uploadhinh.SaveAs(_path);
-
-                    //Update hình cho sản phẩm
-                    using (SqlConnection connection = db.sqlstring())
-                    {
-                        connection.Open();
-                        string sql = "update SanPham set AnhSP = @Hinh where MaSP= @ID";
-                        using (SqlCommand cmd = new SqlCommand(sql, connection))
-                        {                         
-                            cmd.Parameters.Add(new SqlParameter("@Hinh", SqlDbType.NVarChar, 200)).Value = _FileName;
-                            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int)).Value = id;                      
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                  
-                }
-
-
-                return RedirectToAction("Index");
-
+					ParameterName = "MaSP",
+					SqlDbType = SqlDbType.Int,
+					Direction = ParameterDirection.Output
+				};
+				List<string> imageUrls = sp.Images
+	                .SelectMany(urls => urls.Split(','))
+	                .Select(url => url.Trim())
+	                .ToList();
+				ProductModel spmodel = new ProductModel();
+                spmodel.insert(sp, sqlParameter);
+				int maSPValue = (int)sqlParameter.Value;
+				foreach (var item in imageUrls)
+                {
+                    ImageProductModel image = new ImageProductModel();
+					image.insertImageProduct(maSPValue, item);
+				}
+				return RedirectToAction("Index");
             }
             return View(sp);
         }
@@ -120,32 +98,6 @@ namespace ShopBanHoa.Areas.Admin.Controllers
             {
                 ProductModel spmodel = new ProductModel();
                 spmodel.update(sp);
-
-                if (uploadhinh != null && uploadhinh.ContentLength > 0)
-                {
-                   
-                    //Đổi tên theo từng sản phẩm
-                    string _FileName = "";
-                    int index = uploadhinh.FileName.IndexOf('.');
-                    _FileName = "product" + sp.MaSP.ToString() + "." + uploadhinh.FileName.Substring(index + 1);
-                    string _path = Path.Combine(Server.MapPath("~/Assets/admin/images/product"), _FileName);
-
-                    uploadhinh.SaveAs(_path);
-
-                    //Update hình cho sản phẩm
-                    using (SqlConnection connection = db.sqlstring())
-                    {
-                        connection.Open();
-                        string sql = "update SanPham set AnhSP = @Hinh where MaSP= @ID";
-                        using (SqlCommand cmd = new SqlCommand(sql, connection))
-                        {
-                            cmd.Parameters.Add(new SqlParameter("@Hinh", SqlDbType.NVarChar, 200)).Value = _FileName;
-                            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int)).Value = sp.MaSP;
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
-                }
 
                 return RedirectToAction("Index");
             }

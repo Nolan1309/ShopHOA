@@ -93,6 +93,7 @@ namespace ShopBanHoa.Areas.Admin.Models
         public int Trongluong { get; set; }
         [Required(ErrorMessage = "Mô tả nguyên liệu không được để trống!")]
         public string nguyenlieu { get; set; }
+        public List<string> Images { get; set; }
         public Category DanhMuc { get; set; } // Mối quan hệ với Category
     }
 
