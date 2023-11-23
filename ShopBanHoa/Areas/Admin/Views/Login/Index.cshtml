@@ -3,7 +3,7 @@
     Layout = null;
 }
 
-@model ShopBanHoa.Areas.Admin.Models.Account
+@model ShopBanHoa.Models.LoginAccountModel
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,11 +13,11 @@
     <title>Login - ShopHOA</title>
 
     <!-- Favicon -->
-    @*<link rel="shortcut icon" href="assets/images/logo/favicon.png">*@
+
     <link href="~/Assets/admin/images/logo/favicon.png" rel="shortcut icon" />
     <!-- page css -->
     <!-- Core css -->
-    @*<link href="assets/css/app.min.css" rel="stylesheet">*@
+
     <link href="~/Assets/admin/css/app.min.css" rel="stylesheet" />
 
 </head>
@@ -26,11 +26,11 @@
     <div class="app">
         <div class="container-fluid p-0 h-100">
             <div class="row no-gutters h-100 full-height">
-                <div class="col-lg-4 d-none d-lg-flex bg" style="background-image:url('/Assets/admin/images/product/anh4.jpg')">
-                  
+                <div class="col-lg-4 d-none d-lg-flex bg" style="background-image:url('/Assets/admin/images/product/product1.jpg')">
+
                     <div class="d-flex h-100 p-h-40 p-v-15 flex-column justify-content-between">
                         <div>
-                           
+
                             @*<img src="~/Assets/admin/images/logo/logo-white.png" />*@
                         </div>
                         <div>
@@ -57,10 +57,11 @@
                                 <h2>Sign In</h2>
                                 <p class="m-b-30">Enter your credential to get access</p>
 
-                                @using (Html.BeginForm("Login","Login",FormMethod.Post))
+                                @using (Html.BeginForm("Login", "Login", FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken();
-                                    @Html.ValidationSummary(false)
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                                     <div class="form-group">
                                         <label class="font-weight-semibold" for="userName">Username:</label>
                                         <div class="input-affix">
@@ -68,8 +69,9 @@
 
                                             @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Username", @autofocus = "autofocus" })
 
-                                            @*@Html.ValidationMessageFor(model => model.TaiKhoan)*@
+
                                         </div>
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
                                         <label class="font-weight-semibold" for="password">Password:</label>
@@ -78,9 +80,11 @@
                                             <i class="prefix-icon anticon anticon-lock"></i>
 
                                             @Html.TextBoxFor(model => model.MatKhau, new { @class = "form-control", @placeholder = "Password", @type = "password" })
-                                            @*@Html.ValidationMessageFor(model => model.MatKhau)*@
-                                            @*@ViewBag.Error*@
+
                                         </div>
+                                        @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+
+                                        @*@ViewBag.Error*@
                                     </div>
                                     <div class="form-group">
                                         <div class="d-flex align-items-center justify-content-between">

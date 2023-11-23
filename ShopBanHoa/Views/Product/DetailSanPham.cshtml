@@ -130,7 +130,7 @@
                                 </p>
                                 <div class="quantity-cart-box d-flex align-items-center" style="gap:10px">
                                     <div class="action_link">
-                                        <a class="btn btn-cart2" href="#">Thêm vào giỏ</a>
+                                        <a class="btn btn-cart2" href="@Url.Action("ThemVaoGio", "CartUser", new { @masp = Model.MaSP, @URL = Request.Url.ToString()})">Thêm vào giỏ</a>
                                     </div>
                                     <div class="action_link">
                                         <a class="btn btn-cart2" href="@Url.Action("Themgiohang", "CartUser", new { @masp = Model.MaSP, @URL = Request.Url.ToString()})">Thanh toán</a>

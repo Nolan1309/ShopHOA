@@ -2,6 +2,8 @@
 using ShopBanHoa.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -44,25 +46,26 @@ namespace ShopBanHoa.Controllers
             return RedirectToAction("Cart", "CartUser");
 
         }
-        //public ActionResult ThemVaoGio(int masach) //Thêm sản phẩm vào giỏ , sản phẩm vẫn đứng yên.
-        //{
-        //    List<Cart> listgh = laygiohang();
-        //    Cart sanpham = listgh.Find(sp => sp.MaSP == MaSP);
-        //    if (sanpham == null)
-        //    {
-        //        sanpham = new Cart(masach);
-        //        listgh.Add(sanpham);
+        public ActionResult ThemVaoGio(int MaSP) //Thêm sản phẩm vào giỏ , sản phẩm vẫn đứng yên.
+        {
+            List<Cart> listgh = laygiohang();
+            Cart sanpham = listgh.Find(sp => sp.MaSP == MaSP);
+            if (sanpham == null)
+            {
+                sanpham = new Cart(MaSP);
+                listgh.Add(sanpham);
 
-        //    }
-        //    else
-        //    {
-        //        sanpham.SoLuong++;
+            }
+            else
+            {
+                sanpham.SoLuong++;
 
-        //    }
-        //    var sach = db.Saches.FirstOrDefault(s => s.MaSach == masach);
-        //    return RedirectToAction("DetailSach", "Sach", new { id = masach });
+            }
 
-        //}
+            //var sach = db.Saches.FirstOrDefault(s => s.MaSach == masach);
+            return RedirectToAction("DetailSanPham", "Product", new { id = MaSP });
+
+        }
         private int TongSOlUONG()
         {
             int tsl = 0;
@@ -83,7 +86,7 @@ namespace ShopBanHoa.Controllers
             }
             return ttt;
         }
-        public ActionResult Cart()
+        public ActionResult Cart(double? giamgia, string coupon_magiam)
         {
             if (Session["Giohang"] == null)
             {
@@ -91,8 +94,88 @@ namespace ShopBanHoa.Controllers
             }
             List<Cart> list = laygiohang();
             ViewBag.TongSOluong = TongSOlUONG();
-            ViewBag.TongThanhTien = TongThanhTien();
+            decimal tongThanhTien = TongThanhTien();
+            ViewBag.TongThanhTien = tongThanhTien;
+
+            // Lấy phần nguyên của TongThanhTien để tính VAT
+            int tongThanhTienIntPart = (int)tongThanhTien;
+
+            double VAT = tongThanhTienIntPart * 0.1;
+            int VAT2 = (int)VAT;
+            ViewBag.VAT = VAT;
+            ViewBag.Total = VAT + tongThanhTienIntPart;
+            ViewBag.MaCODE = coupon_magiam;
+            ViewBag.PhanTramGiam = 0;
+            if (giamgia != null)
+            {
+                ViewBag.PhanTramGiam = giamgia;
+                ViewBag.GiamGia = (giamgia / 100) * (VAT + tongThanhTienIntPart);
+                ViewBag.Total = (VAT + tongThanhTienIntPart) - (giamgia/100)* (VAT + tongThanhTienIntPart);
+            }
             return View(list);
+        }
+        [HttpPost]
+        public ActionResult MaGiamGia(string coupon_magiam)
+        {
+            if (coupon_magiam != "")
+            {
+                using (SqlConnection connection = db.sqlstring())
+                {
+                    connection.Open();
+                    string sql = "select Giamgia from Magiamgia where Code = '" + coupon_magiam + "'";
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, connection))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                        {
+                            // Lấy giá trị giảm giá từ DataTable
+                            decimal discountValue = Convert.ToDecimal(dt.Rows[0]["Giamgia"]);
+
+                            // Lưu giá trị giảm giá vào ViewBag
+                            ViewBag.giamgia = discountValue;
+                        }
+                    }
+                    connection.Close();
+                    return RedirectToAction("Cart", "CartUser", new { giamgia = ViewBag.giamgia, coupon_magiam });
+                }
+            }
+            ViewBag.giamgia = 0;
+            return RedirectToAction("Cart", "CartUser");
+        }
+        public ActionResult XoaGioHang(int masp)
+        {
+            List<Cart> list = laygiohang();
+            Cart sp = list.Single(x => x.MaSP == masp);
+            if (sp != null)
+            {
+                list.RemoveAll(x => x.MaSP == masp);
+                return RedirectToAction("Cart", "CartUser");
+
+            }
+            if (list.Count == 0)
+            {
+
+                return RedirectToAction("Index", "Product");
+
+            }
+            return RedirectToAction("Cart", "CartUser");
+
+        }
+        public ActionResult CapNhatGioHang(string txtSoLuong, string iMaSach)
+        {
+            List<Cart> list = laygiohang();
+            int masach1 = Convert.ToInt32(iMaSach);
+            int newSoLuong = Convert.ToInt32(txtSoLuong);
+
+            Cart giohangToUpdate = list.FirstOrDefault(item => item.MaSP == masach1);
+            if (giohangToUpdate != null)
+            {
+
+                giohangToUpdate.SoLuong = newSoLuong;
+            }
+
+            return RedirectToAction("Cart", "CartUser");
         }
     }
 }

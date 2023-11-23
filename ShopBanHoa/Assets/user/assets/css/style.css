@@ -5300,7 +5300,14 @@ only screen and (max-width: 767.98px) {
 .checkout-page-wrapper {
     margin-bottom: -8px;
 }
-
+.diachi {
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 12px 10px;
+    width: 100%;
+    font-size: 14px;
+    background: #f7f7f7;
+}
 @media only screen and (min-width: 768px) and (max-width: 991.98px),
 only screen and (max-width: 767.98px) {
     .checkout-page-wrapper {

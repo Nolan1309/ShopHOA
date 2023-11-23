@@ -36,7 +36,7 @@ namespace ShopBanHoa.Models
         [Required(ErrorMessage = "Tên không được để trống!")]
         public string FullName { get; set; }
 
-
+        public string DiaChi { get; set; }
         public DateTime? CreateDate { get; set; }
 
         [Required(ErrorMessage = "Vai trò không được để trống!")]
@@ -102,7 +102,7 @@ namespace ShopBanHoa.Models
         public string tenkhachhang { get; set; }
         public string Thongtin { get; set; }
         public SanPham SanPham { get; set; } // Mối quan hệ với SanPham
-        
+
     }
 
     public class DonHang
@@ -164,5 +164,14 @@ namespace ShopBanHoa.Models
         public bool? Status { get; set; }
         public int? ViewCount { get; set; }
         public ContentCategory DanhMuc { get; set; } // Mối quan hệ với ContentCategory
+    }
+    public class HinhAnhSanPhamModel
+    {
+        public int IdHinhAnh { get; set; }
+        public int MaSP { get; set; }
+        public string DuongDan { get; set; }
+
+        public SanPham HinhAnh { get; set; }
+      
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ShopBanHoa.Areas.Admin.Code;
 using ShopBanHoa.Areas.Admin.DAO_ADMIN;
 using ShopBanHoa.Areas.Admin.Models;
+using ShopBanHoa.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace ShopBanHoa.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Account account)
+        public ActionResult Login(LoginAccountModel account)
         {
             if (ModelState.IsValid)
             {
@@ -40,7 +41,8 @@ namespace ShopBanHoa.Areas.Admin.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng!");
-                    ViewBag.Error = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                    return View("Index");
+                  
                 }
             }
             return View("Index");

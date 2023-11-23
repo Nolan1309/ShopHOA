@@ -128,10 +128,18 @@
                                         <p class="product-name">
                                             <a href="product-details.html">@item.TenSP</a>
                                         </p>
-                                        <div class="price-box">
-                                            <span class="price-regular">@item.GiaSale</span>
+                                        @if (@item.GiaSale != 0)
+                                        {
+                                            <div class="price-box">
                                             <span class="price-old"><del>@item.GiaSP</del></span>
-                                        </div>
+                                            <span class="price-regular">@item.GiaSale</span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="price-old">@item.GiaSP</span>
+                                        }
+                                       
                                     </div>
                                 </div>
                                 <!-- product grid end -->

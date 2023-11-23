@@ -48,7 +48,7 @@ namespace ShopBanHoa.Areas.Admin.DAO_ADMIN
         public Account getID(string name)
         {
             Account account = null;
-            string sql = "select * from Account where email = '"+name+"'";
+            string sql = "select AccountID,Email,MatKhau,Phone,CreateDate,IdVaiTro from Account where email = '" + name+"'";
             using (SqlConnection connection = db.sqlstring())
             {
                 connection.Open();
