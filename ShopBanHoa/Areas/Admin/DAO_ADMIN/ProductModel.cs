@@ -137,31 +137,38 @@ namespace ShopBanHoa.Areas.Admin.DAO_ADMIN
             }
             return sp;
         }
-        public void insert(SanPham sp)
-        {
-            using (SqlConnection connection = db.sqlstring())
-            {
-                connection.Open();
-                using (SqlCommand cmd = new SqlCommand("AddProduct", connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@MaDM", sp.MaDM));
-                    cmd.Parameters.Add(new SqlParameter("@TenSP", sp.TenSP));
-                    cmd.Parameters.Add(new SqlParameter("@GiaSP", sp.GiaSP));
-                    cmd.Parameters.Add(new SqlParameter("@GiaSale", sp.GiaSale));
-                    cmd.Parameters.Add(new SqlParameter("@SoLuong", sp.SoLuong));
-                    cmd.Parameters.Add(new SqlParameter("@SalePercent", sp.SalePercent));
-                    cmd.Parameters.Add(new SqlParameter("@MotaShort", sp.MotaShort));
-                    cmd.Parameters.Add(new SqlParameter("@MotaDai", sp.MotaDai));
-                    cmd.Parameters.Add(new SqlParameter("@Trongluong", sp.Trongluong));
-                    cmd.Parameters.Add(new SqlParameter("@nguyenlieu", sp.nguyenlieu));
+		public void insert(SanPham sp, SqlParameter maSPParam)
+		{
+			using (SqlConnection connection = db.sqlstring())
+			{
+				connection.Open();
+				using (SqlCommand cmd = new SqlCommand("AddProduct", connection))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.Add(new SqlParameter("@MaDM", sp.MaDM));
+					cmd.Parameters.Add(new SqlParameter("@TenSP", sp.TenSP));
+					cmd.Parameters.Add(new SqlParameter("@AnhSP", sp.AnhSP));
+					cmd.Parameters.Add(new SqlParameter("@GiaSP", sp.GiaSP));
+					cmd.Parameters.Add(new SqlParameter("@GiaSale", sp.GiaSale));
+					cmd.Parameters.Add(new SqlParameter("@SoLuong", sp.SoLuong));
+					cmd.Parameters.Add(new SqlParameter("@SalePercent", sp.SalePercent));
+					cmd.Parameters.Add(new SqlParameter("@MotaShort", sp.MotaShort));
+					cmd.Parameters.Add(new SqlParameter("@MotaDai", sp.MotaDai));
+					cmd.Parameters.Add(new SqlParameter("@Trongluong", sp.Trongluong));
+					cmd.Parameters.Add(new SqlParameter("@nguyenlieu", sp.nguyenlieu));
 
-                    cmd.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-        }
-        public void update(SanPham sp)
+					// Thêm tham số OUTPUT cho MaSP
+					maSPParam.Direction = ParameterDirection.Output;
+					maSPParam.SqlDbType = SqlDbType.Int;
+					cmd.Parameters.Add(maSPParam);
+
+					cmd.ExecuteNonQuery();
+				}
+				connection.Close();
+			}
+		}
+
+		public void update(SanPham sp)
         {
             using (SqlConnection connection =db.sqlstring())
             {
@@ -173,6 +180,7 @@ namespace ShopBanHoa.Areas.Admin.DAO_ADMIN
                     command.Parameters.Add(new SqlParameter("@masp", SqlDbType.Int)).Value = sp.MaSP;
                     command.Parameters.Add(new SqlParameter("@MaDM", SqlDbType.Int)).Value = sp.MaDM;
                     command.Parameters.Add(new SqlParameter("@TenSP", SqlDbType.NVarChar, 200)).Value = sp.TenSP;
+                    command.Parameters.Add(new SqlParameter("@AnhSP", SqlDbType.NVarChar, -1)).Value = sp.AnhSP;
                     command.Parameters.Add(new SqlParameter("@GiaSP", SqlDbType.Decimal)).Value = sp.GiaSP;
                     command.Parameters.Add(new SqlParameter("@GiaSale", SqlDbType.Decimal)).Value = sp.GiaSale;
                     command.Parameters.Add(new SqlParameter("@SoLuong", SqlDbType.Int)).Value = sp.SoLuong;

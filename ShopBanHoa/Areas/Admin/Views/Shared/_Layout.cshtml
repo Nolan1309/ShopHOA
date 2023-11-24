@@ -352,7 +352,7 @@
 
                 <!-- Content Wrapper START -->
                 <div class="main-content">
-                   @RenderBody()
+                    @RenderBody()
                 </div>
                 <!-- Content Wrapper END -->
                 <!-- Footer START -->
@@ -541,12 +541,13 @@
     <script src="~/Assets/admin/vendors/chartjs/Chart.min.js"></script>
     <script src="~/Assets/admin/js/pages/dashboard-crm.js"></script>
 
-    
+
     <!-- Core JS -->
- 
+
     <script src="~/Assets/admin/js/app.min.js"></script>
-
-
+    <script src="~/Assets/admin/js/plugins/ckfinder/ckfinder.js"></script>
+    <script src="~/Assets/admin/js/plugins/ckeditor/ckeditor.js"></script>
+    @RenderSection("jsFooter", required: false)
 </body>
 
 </html>

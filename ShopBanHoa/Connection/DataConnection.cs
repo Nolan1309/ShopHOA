@@ -12,7 +12,7 @@ namespace ShopBanHoa.Connection
         public DataConnection()
         {
             //sql = "Data Source=DESKTOP-MEUMH4V;Initial Catalog=ShopBanHoa_Final;Integrated Security=True";
-            sql = "Data Source=DESKTOP-MEUMH4V;Initial Catalog=Shop2;Integrated Security=True";
+            sql = "Data Source=DESKTOP-0FNV5PO;Initial Catalog=Shop2;Integrated Security=True";
         }
         public SqlConnection sqlstring()
         {
