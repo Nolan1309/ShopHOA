@@ -62,10 +62,7 @@ namespace ShopBanHoa.Areas.Admin.Controllers
 					SqlDbType = SqlDbType.Int,
 					Direction = ParameterDirection.Output
 				};
-				List<string> imageUrls = sp.Images
-	                .SelectMany(urls => urls.Split(','))
-	                .Select(url => url.Trim())
-	                .ToList();
+				List<string> imageUrls = sp.Images.Split(',').ToList();
 				ProductModel spmodel = new ProductModel();
                 spmodel.insert(sp, sqlParameter);
 				int maSPValue = (int)sqlParameter.Value;
@@ -84,22 +81,31 @@ namespace ShopBanHoa.Areas.Admin.Controllers
            
             ProductModel model = new ProductModel();
             SanPham list = model.GetProductItem(Convert.ToInt32(id));
-
-            CategoryModel catemodel = new CategoryModel();
+			ImageProductModel imageProductModel = new ImageProductModel();
+			List<string> ListImgs = imageProductModel.getImageProduct(Convert.ToInt32(id));
+            list.Images = string.Join(",", ListImgs);
+			CategoryModel catemodel = new CategoryModel();
             var danhMucList = catemodel.Getds();
             ViewBag.DanhMucList = new SelectList(danhMucList, "MaDM", "TenDM");
 
             return View(list);
         }
         [HttpPost]
-        public ActionResult Edit(SanPham sp, HttpPostedFileBase uploadhinh)
+        public ActionResult Edit(SanPham sp)
         {
             if (ModelState.IsValid)
             {
                 ProductModel spmodel = new ProductModel();
+                ImageProductModel imageProductModel = new ImageProductModel();
                 spmodel.update(sp);
-
-                return RedirectToAction("Index");
+                imageProductModel.deleteImageProduct(sp.MaSP);
+				List<string> imageUrls = sp.Images.Split(',').ToList();
+                foreach (var item in imageUrls)
+                {
+					ImageProductModel image = new ImageProductModel();
+					image.insertImageProduct(sp.MaSP, item);
+				}
+				return RedirectToAction("Index");
             }
             return View(sp);
         }
@@ -115,10 +121,12 @@ namespace ShopBanHoa.Areas.Admin.Controllers
         {
             bool result = false;
             var product = new ProductModel();
-            int effect = product.DeleteAccount(EmployeeId);
+			ImageProductModel imageProductModel = new ImageProductModel();
+			imageProductModel.deleteImageProduct(EmployeeId);
+			int effect = product.DeleteAccount(EmployeeId);
             if (effect > 0)
             {
-                result = true;
+				result = true;
             }
             else
             {

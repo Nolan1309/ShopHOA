@@ -24,5 +24,37 @@ namespace ShopBanHoa.Areas.Admin.DAO_ADMIN
 				connection.Close();
 			}
 		}
+
+		public List<string> getImageProduct(int productId)
+		{
+			List<string> list = new List<string>();
+			using (SqlConnection connection = db.sqlstring())
+			{
+				connection.Open();
+				string sql = "select DuongDan from HinhAnhSanPham where MaSP = @MaSP";
+				SqlCommand command = new SqlCommand(sql, connection);
+				command.Parameters.AddWithValue("@MaSP", productId);
+				SqlDataReader reader = command.ExecuteReader();
+				while (reader.Read())
+				{
+					list.Add(reader["DuongDan"].ToString());
+				}
+				connection.Close();
+			}
+			return list;
+		}
+
+		public void deleteImageProduct(int productId)
+		{
+			using (SqlConnection connection = db.sqlstring())
+			{
+				connection.Open();
+				string sql = "delete from HinhAnhSanPham where MaSP = @MaSP";
+				SqlCommand command = new SqlCommand(sql, connection);
+				command.Parameters.AddWithValue("@MaSP", productId);
+				command.ExecuteNonQuery();
+				connection.Close();
+			}
+		}
 	}
 }
